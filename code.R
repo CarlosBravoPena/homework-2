@@ -1,5 +1,7 @@
 library(tidyverse)
 library(dslabs)
+library(dplyr)
+
 getwd()
 setwd()
 
@@ -12,7 +14,7 @@ fullpath
 
 getwd()
 file.copy(fullpath,getwd())
-library(readxl)
+
 read_lines("murders.csv", n_max = 3)
 dat <- read_csv(filename)
 dat <- read_csv(fullpath)
@@ -29,4 +31,11 @@ dat1=read.csv(file.path(path, filename1))
 dat2=read.csv(file.path(path, filename2))
 
 head(dat1)
+data(gapminder)
+library(readxl)
+path <- system.file("extdata", package="dslabs")
+filename <- file.path(path,  "fertility-two-countries-example.csv")
+wide_data <- read_csv(filename)
+select(wide_data, country, `1960`:`1967`)
+wide_data
 
