@@ -43,3 +43,4 @@ grid.arrange(grafico_puntos,grafico_hist,ncol=2)
 
 
 
+
