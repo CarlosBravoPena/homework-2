@@ -3,8 +3,9 @@ library(readr)
 library(readxl)
 library(dslabs)
 library(dplyr)
+library(gridExtra)
 
-
+install.packages("gridExtra")
 
 filename <- "Pedidos.xls"
 file<- file.path("C:/Users/Carlos Bravo/Desktop/R/homework-2",filename)
@@ -31,9 +32,10 @@ tickets<- new_tidy %>% group_by(ID) %>%
   summarise(precio_canasta=sum(`Precio del Producto`),n=n())
 tickets
 mean(tickets$precio_canasta)
-tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=precio_canasta))+geom_line(aes(x=ID,y=mean(precio_canasta)))
+grafico_puntos<-tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=precio_canasta))+geom_line(aes(x=ID,y=mean(precio_canasta)))
 
-
+grafico_hist<-tickets%>% ggplot()+geom_histogram(aes(precio_canasta))
+grid.arrange(grafico_puntos,grafico_hist,ncol=2)
 
 
 
