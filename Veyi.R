@@ -31,7 +31,7 @@ tickets<- new_tidy %>% group_by(ID) %>%
   summarise(precio_canasta=sum(`Precio del Producto`),n=n())
 tickets
 mean(tickets$precio_canasta)
-tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=precio_canasta))+geom_line(aes(x=ID,y=mean(tickets$precio_canasta)))
+tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=precio_canasta))+geom_line(aes(x=ID,y=mean(precio_canasta)))
 
 
 
