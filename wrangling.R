@@ -47,3 +47,6 @@ dat <- admissions %>% select(-applicants)
 head(dat)
 tmp <- gather(admissions, key, value, admitted:applicants)
 tmp
+
+
+
