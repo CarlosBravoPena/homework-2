@@ -42,13 +42,14 @@ tickets<- new_tidy %>% group_by(ID) %>%
 tickets
 mean(tickets$precio_canasta)
 mean(tickets$n)
-grafico_puntos_tickets<-tickets%>% ggplot(aes(x=ID,y=precio_canasta,label=ID))+
-  geom_point(aes(ID,colour=precio_canasta),size=3)+
+grafico_puntos_tickets<-tickets%>% ggplot(aes(x=ID,y=precio_canasta))+
+  geom_point(aes(ID,colour=precio_canasta),size=2)+
   geom_line(aes(x=ID,y=mean(precio_canasta)))+
   ggtitle("Dispersion de Valor Tickets")+
   xlab("Pedido #")+
   ylab("Valor ticket")+
-  theme_economist()
+  theme_economist()+
+  scale_color_continuous(name="tickets")
 
 grafico_hist<-tickets%>% ggplot()+geom_histogram(aes(precio_canasta))
 
