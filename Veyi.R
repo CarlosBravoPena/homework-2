@@ -4,7 +4,11 @@ library(readxl)
 library(dslabs)
 library(dplyr)
 library(gridExtra)
+library(ggplot2)
+library(ggthemes)
+library(ggrepel)
 
+install.packages(c("ggrepel","ggthemes"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
 
 
 filename <- "Pedidos.xls"
@@ -38,7 +42,13 @@ tickets<- new_tidy %>% group_by(ID) %>%
 tickets
 mean(tickets$precio_canasta)
 mean(tickets$n)
-grafico_puntos_tickets<-tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=precio_canasta))+geom_line(aes(x=ID,y=mean(precio_canasta)))
+grafico_puntos_tickets<-tickets%>% ggplot(aes(x=ID,y=precio_canasta,label=ID))+
+  geom_point(aes(ID,colour=precio_canasta),size=3)+
+  geom_line(aes(x=ID,y=mean(precio_canasta)))+
+  ggtitle("Dispersion de Valor Tickets")+
+  xlab("Pedido #")+
+  ylab("Valor ticket")+
+  theme_economist()
 
 grafico_hist<-tickets%>% ggplot()+geom_histogram(aes(precio_canasta))
 
