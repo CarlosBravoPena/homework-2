@@ -61,3 +61,38 @@ top <- Batting %>%
   arrange(desc(HR)) %>%    # arrange by descending HR count
   slice(1:10)    # take entries 1-10
 top %>% as_tibble()
+names(top)
+Master %>% as_tibble()
+top_names <- top %>% left_join(Master) %>%
+  select(playerID, nameFirst, nameLast, HR)
+top_names
+
+top_salary <- Salaries %>% filter(yearID == 2016) %>%
+  right_join(top_names) %>%
+  select(nameFirst, nameLast, teamID, HR, salary)
+names(AwardsPlayers)
+tabla <- AwardsPlayers %>% filter(yearID==2016)
+
+library(rvest)
+url <- "https://web.archive.org/web/20181024132313/http://www.stevetheump.com/Payrolls.htm"
+h <- read_html(url)
+nodes <- html_nodes(h, "table")
+nodes
+html_text(nodes[[4]])
+html_table(nodes[[4]])
+sapply(nodes[1:4], html_table=TRUE)
+
+html_table(nodes[[length(nodes)-2]])
+html_table(nodes[[length(nodes)-1]])
+html_table(nodes[[length(nodes)]])
+
+h10<- html_table(nodes[10])
+h19<- html_table(nodes[19])
+url <- "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&oldid=896735054"
+table<- read_html(url)
+table
+tab<- html_nodes(table, "table")
+length(html_table(tab[[5]], fill=TRUE))
+
+
+tab[[5]] %>% html_table(fill = TRUE) %>% names()
