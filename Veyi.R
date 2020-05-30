@@ -37,6 +37,8 @@ head(new_tidy)
 
 
 new_tidy
+
+
 tickets<- new_tidy %>% group_by(ID) %>%
   summarise(precio_canasta=sum(Total),n_productos=n())
 tickets
@@ -48,7 +50,7 @@ grafico_puntos_tickets<-tickets%>% ggplot(aes(x=ID,y=precio_canasta))+
   ggtitle("Dispersion de Valor Tickets")+
   xlab("Pedido #")+
   ylab("Valor ticket")+
-  theme_economist()+
+  
   scale_color_continuous(name="tickets")
 
 grafico_hist<-tickets%>% ggplot()+geom_histogram(aes(precio_canasta))
