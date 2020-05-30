@@ -37,9 +37,12 @@ grafico_puntos<-tickets%>% ggplot()+geom_point(aes(x=ID,y=precio_canasta,colour=
 grafico_hist<-tickets%>% ggplot()+geom_histogram(aes(precio_canasta))
 grid.arrange(grafico_puntos,grafico_hist,ncol=2)
 
+names(new_tidy)
+comuna<- new_tidy %>% filter(!is.na(`Municipio de envío`)) %>% select(ID,`Municipio de envío`)
 
+frec_comuna <- comuna %>% group_by(`Municipio de envío`) %>% count(`Municipio de envío`)
 
-
+frec_comuna %>% ggplot()+geom_point(aes(x=`Municipio de envío`,y=n))
 
 
 
