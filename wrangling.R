@@ -48,5 +48,16 @@ head(dat)
 tmp <- gather(admissions, key, value, admitted:applicants)
 tmp
 
+tab1 <- slice(murders, 1:6) %>% select(state, population)
+tab1
+tab2 <- slice(results_us_election_2016, c(1:3, 5, 7:8)) %>% select(state, electoral_votes)
+tab2
 
 
+install.packages(c("Lahman"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
+library(Lahman)
+top <- Batting %>% 
+  filter(yearID == 2016) %>%
+  arrange(desc(HR)) %>%    # arrange by descending HR count
+  slice(1:10)    # take entries 1-10
+top %>% as_tibble()
