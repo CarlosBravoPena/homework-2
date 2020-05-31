@@ -54,7 +54,7 @@ tab2 <- slice(results_us_election_2016, c(1:3, 5, 7:8)) %>% select(state, electo
 tab2
 
 
-install.packages(c("Lahman"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
+install.packages(c("tmap","tmaptools"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
 library(Lahman)
 top <- Batting %>% 
   filter(yearID == 2016) %>%
@@ -96,3 +96,7 @@ length(html_table(tab[[5]], fill=TRUE))
 
 
 tab[[5]] %>% html_table(fill = TRUE) %>% names()
+maptools::readShapeSpatial("C:/Users/Carlos Bravo/Desktop/R/comunas.shp")
+library(sf)
+
+
