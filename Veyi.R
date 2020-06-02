@@ -97,8 +97,8 @@ library(tmaptools)
 tm_shape(comunas_veyi)+
   tm_polygons("n",id="Comuna",palette="Greens")
 
-tmap_mode("view")
-tmap_last()
+
+
 test_map<-tmap_last()
 tmap_save(test_map,"C:/Users/Carlos Bravo/Desktop/R/comunas/test_map.html")
 
