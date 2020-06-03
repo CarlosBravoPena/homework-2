@@ -54,7 +54,7 @@ tab2 <- slice(results_us_election_2016, c(1:3, 5, 7:8)) %>% select(state, electo
 tab2
 
 
-install.packages(c("tmap","tmaptools"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
+install.packages(c("gutenbergr"),lib="C:/Users/Carlos Bravo/Desktop/R/packages")
 library(Lahman)
 top <- Batting %>% 
   filter(yearID == 2016) %>%
@@ -99,4 +99,48 @@ tab[[5]] %>% html_table(fill = TRUE) %>% names()
 maptools::readShapeSpatial("C:/Users/Carlos Bravo/Desktop/R/comunas.shp")
 library(sf)
 
+library(rvest)
+library(tidyverse)
+library(stringr)
+url <- "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&oldid=896735054"
+tab <- read_html(url) %>% html_nodes("table")
+polls <- tab[[5]] %>% html_table(fill = TRUE)
 
+
+data(brexit_polls)
+head(brexit_polls)
+names(brexit_polls)
+brexit_polls<- brexit_polls%>% mutate(mes=month(brexit_polls$startdate))
+brexit_polls
+sum(brexit_polls$mes==4)
+
+
+
+sum(round_date(brexit_polls$enddate, unit = "week") == "2016-06-12")
+
+brexit_polls<- brexit_polls%>% mutate(dia=weekdays(brexit_polls$enddate))
+sum(brexit_polls$dia=="lunes")
+sum(brexit_polls$dia=="martes")
+sum(brexit_polls$dia=="miércoles")
+sum(brexit_polls$dia=="jueves")
+sum(brexit_polls$dia=="viernes")
+sum(brexit_polls$dia=="sábado")
+sum(brexit_polls$dia=="domingo")
+  
+table(weekdays(brexit_polls$enddate))
+
+data(movielens)
+names(movielens)
+movielens
+
+movielens<- movielens%>% mutate(fecha=as_datetime(timestamp),hora=hour(fecha))
+table(movielens$hora)
+
+library(tidyverse)
+library(gutenbergr)
+library(tidytext)
+options(digits = 3)
+gutenberg_metadata
+gutenberg_metadata %>%
+  filter(str_detect(title, "Pride and Prejudice"))
+gutenberg_works()
