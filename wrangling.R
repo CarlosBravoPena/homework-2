@@ -141,6 +141,48 @@ library(gutenbergr)
 library(tidytext)
 options(digits = 3)
 gutenberg_metadata
-gutenberg_metadata %>%
-  filter(str_detect(title, "Pride and Prejudice"))
-gutenberg_works()
+gutenberg_works(str_detect(title, "Pride and Prejudice"))
+
+
+text<- gutenberg_download(1342)
+text
+words<- text%>%unnest_tokens(word,text)
+stop_words
+no_stop
+words <- words %>%
+  filter(!str_detect(word, "\\d"))
+nrow(words)
+words %>%
+  count(word) %>%
+  filter(n > 100) %>%
+  nrow()
+
+book <- gutenberg_download(1342)
+words <- book %>%
+  unnest_tokens(word, text)
+nrow(words)
+words <- words %>% anti_join(stop_words)
+nrow(words)
+words <- words %>%
+  filter(!str_detect(word, "\\d"))
+nrow(words)
+
+words %>%
+  count(word) %>%
+  filter(n > 100) %>%
+  nrow()
+
+words %>%
+  count(word) %>%
+  top_n(1, n) %>%
+  pull(word)
+
+words %>%
+  count(word) %>%
+  top_n(1, n) %>%
+  pull(n)
+
+afinn <- get_sentiments("afinn")
+afinn_sentiments<- inner_join(words, afinn)
+afinn_sentiments
+sum(afinn_sentiments$value==4)
