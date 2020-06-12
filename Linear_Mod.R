@@ -168,3 +168,98 @@ dat %>%
   })
   
   cor(lse[1,], lse[2,])
+  
+  
+  # plot predictions and confidence intervals
+  library(dplyr)
+  library(ggplot2)
+  
+  galton_heights %>% ggplot(aes(son, father)) +
+    geom_point() +
+    geom_smooth(method = "lm")
+  
+  # predict Y directly
+  fit <- galton_heights %>% lm(son ~ father, data = .) 
+  Y_hat <- predict(fit, se.fit = TRUE)
+  names(Y_hat)
+  
+  # plot best fit line
+  galton_heights %>%
+    mutate(Y_hat = predict(lm(son ~ father, data=.))) %>%
+    ggplot(aes(father, Y_hat))+
+    geom_line()
+  
+  
+  #ejercicio pregunta 1
+  beta1 = seq(0, 1, len=nrow(galton_heights))
+  results <- data.frame(beta1 = beta1,
+                        rss = sapply(beta1, rss, beta0 = 36))
+  results %>% ggplot(aes(beta1, rss)) + geom_line() + 
+    geom_line(aes(beta1, rss), col=2)
+  
+  #pregunta 4 ejercicio
+  B <- 1000
+  N <- 100
+  lse <- replicate(B, {
+    sample_n(galton_heights, N, replace = TRUE) %>% 
+      lm(son ~ father, data = .) %>% .$coef 
+  })
+  
+  lse <- data.frame(beta_0 = lse[1,], beta_1 = lse[2,]) 
+lse
+
+
+
+set.seed(1989, sample.kind="Rounding") #if you are using R 3.6 or later
+library(HistData)
+data("GaltonFamilies")
+options(digits = 3)    # report 3 significant digits
+
+female_heights <- GaltonFamilies %>%     
+  filter(gender == "female") %>%     
+  group_by(family) %>%     
+  sample_n(1) %>%     
+  ungroup() %>%     
+  select(mother, childHeight) %>%     
+  rename(daughter = childHeight)
+
+
+sample_n(female_heights, N, replace = TRUE) %>% 
+  lm(daughter ~ mother, data = .) %>% 
+  summary %>%
+  .$coef
+
+fit$coef[1]
+
+female_heights$mother[1]
+
+
+library(Lahman)
+bat_02 <- Batting %>% filter(yearID == 2002) %>%
+  mutate(pa = AB + BB, singles = (H - X2B - X3B - HR)/pa, bb = BB/pa) %>%
+  filter(pa >= 100) %>%
+  select(playerID, singles, bb)
+#pregunta del examen
+
+library(Lahman)
+bat_99_01 <- Batting %>% filter(yearID %in% 1999:2001) %>%
+  mutate(pa = AB + BB, singles = (H - X2B - X3B - HR)/pa, bb = BB/pa) %>%
+  filter(pa >= 100) %>%
+  group_by(playerID) %>%
+  summarize(mean_singles = mean(singles), mean_bb = mean(bb))
+sum(bat_99_01$mean_singles > 0.2)
+#pregunta del examen
+
+sum(bat_99_01$mean_bb > 0.2)
+set.seed(1)
+
+new<-inner_join(bat_02,bat_99_01)
+cor(new$singles,new$mean_singles)
+new<-inner_join(bat_02,bat_99_01)
+cor(new$BB,new$mean_bb)
+
+fit_singles <- lm(singles ~ mean_singles, data = new)
+fit_singles$coef[2]
+fit_bb <- lm(bb ~ mean_bb, data = new)
+fit_bb$coef[2]
+
