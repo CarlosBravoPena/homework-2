@@ -65,6 +65,27 @@ two_by_two %>%
   filter(awarded == "yes") %>%
   pull(women)
 
-# test whether gender and admission are independent
-two_by_two %>% 
-  tidy(chisq.test(.))
+# respuesta pregunta 3
+
+  two_by_two%>%select(-awarded)%>%do(tidy(chisq.test(.)))
+  
+  #pregunta 4
+  dat <- research_funding_rates %>% 
+    mutate(discipline = reorder(discipline, success_rates_total)) %>%
+    rename(success_total = success_rates_total,
+           success_men = success_rates_men,
+           success_women = success_rates_women) %>%
+    gather(key, value, -discipline) %>%
+    separate(key, c("type", "gender")) %>%
+    spread(type, value) %>%
+    filter(gender != "total")
+  dat
+  
+  
+  dat %>% 
+    ggplot(aes(discipline, success, size = applications, color = gender)) + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    geom_point()
+  
+ 
+  
