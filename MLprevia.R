@@ -44,7 +44,59 @@ max(accuracy)
 best_cutoff<-cutoff[which.max(accuracy)]
 best_cutoff
 
+#ahora podemos probar este cutoff en el grupo de test y ver si esta funcionando bien
 
+y_hat<- ifelse(test_set$height>best_cutoff,"Male","Female")%>%
+  factor(levels=levels(test_set$sex))
+y_hat<-factor(y_hat)
+mean(y_hat==test_set$sex)
+
+#confusion matrix
+
+table(predicted=y_hat,actual=test_set$sex)
+#calculamos la accuracy por sexo
+
+test_set%>%
+  mutate(y_hat=y_hat)%>%
+  group_by(sex)%>%
+  summarize(accuracy=mean(y_hat==sex))
+
+#matriz de confusion con caret package
+
+cm<- confusionMatrix(data=y_hat,reference = test_set$sex)
+
+cm
+
+F_1<- map_dbl(cutoff,function(x){
+  y_hat<-ifelse(train_set$height>x,"Male","Female")%>%
+    factor(levels=levels(test_set$sex))
+  F_meas(data=y_hat, reference=factor(train_set$sex))
+  
+})
+plot(cutoff,F_1)
+max(F_1)
+best_cutoff<-cutoff[which.max(F_1)]
+best_cutoff
+y_hat<- ifelse(test_set$height>best_cutoff,"Male","Female")%>%
+  factor(levels=levels(test_set$sex))
+
+sensitivity(data=y_hat,reference=test_set$sex)
+specificity(data=y_hat, reference=test_set$sex)
+
+#ROC cuando comparamos el metodo de cutoff con adivinar
+p<-0.9
+
+probs<- seq(0,1,length.out = 10)
+guessing<- map_df(probs,function(x){
+  y_hat<-
+    sample(c("Male","Female"),n,replace=TRUE,prob=c(p,1-p))%>%
+    factor(levels=c("Female","Male"))
+  list(method="Guessing",
+       FPR=1-specificity(y_hat,test_set$sex),
+       TPR=sensitivity(y_hat,test_set$sex))
+
+})
+plot(guessing$FPR,guessing$TPR)
 
 
 
